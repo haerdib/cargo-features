@@ -2,27 +2,18 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "serde")]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Default)]
 struct Point {
-    // Serialize for HashMap is available in std only.
+    // Serialize for HashMap is only available in std.
     x: std::collections::HashMap<String, String>,
-    y: i32,
 }
 
 #[cfg(feature = "serde")]
 pub fn test() {
-    let point = Point {
-        x: Default::default(),
-        y: 2,
-    };
+    let point = Point::default();
 
-    let test = std::sync::Mutex::new(point);
-
-    let serialized = serde_json::to_string(&test).unwrap();
+    let serialized = serde_json::to_string(&point).unwrap();
     println!("serialized = {}", serialized);
-
-    let deserialized: Point = serde_json::from_str(&serialized).unwrap();
-    println!("deserialized = {:?}", deserialized);
 }
 
 fn main() {
